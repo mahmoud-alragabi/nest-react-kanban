@@ -17,10 +17,12 @@ model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   password  String
-  name      String?
+  name      String
+  role      Role     @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   boards    Board[]
+  tasks     Task[]
 }
 
 model Board {
@@ -28,28 +30,35 @@ model Board {
   title     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  columns   Column[]
-  owner     User     @relation(fields: [ownerId], references: [id])
+  lists     List[]
+  owner     User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId   Int
 }
 
-model Column {
+model List {
   id        Int      @id @default(autoincrement())
   title     String
-  order     Int
+  position  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   tasks     Task[]
-  board     Board    @relation(fields: [boardId], references: [id])
+  board     Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
   boardId   Int
 }
 
 model Task {
   id        Int      @id @default(autoincrement())
   title     String
-  order     Int
+  position  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  column    Column   @relation(fields: [columnId], references: [id])
-  columnId  Int
+  list      List     @relation(fields: [listId], references: [id], onDelete: Cascade)
+  listId    Int
+  owner     User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId   Int
+}
+
+enum Role {
+  ADMIN
+  USER
 }
