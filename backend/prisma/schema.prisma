@@ -27,6 +27,7 @@ model User {
   updatedAt DateTime @updatedAt
   boards    Board[]
   tasks     Task[]
+  lists     List[]
 }
 
 model Board {
@@ -48,6 +49,8 @@ model List {
   tasks     Task[]
   board     Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
   boardId   Int
+  owner     User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId   Int
 }
 
 model Task {

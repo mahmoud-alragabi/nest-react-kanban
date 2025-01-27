@@ -24,6 +24,7 @@ export type List = {
   createdAt: Generated<Timestamp>;
   updatedAt: Generated<Timestamp>;
   boardId: number;
+  ownerId: number;
 };
 export type Task = {
   id: Generated<number>;
