@@ -2,10 +2,12 @@ import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { KyselyModule } from 'src/kysely/kysely.module';
+import { RolesGuard } from 'src/common/guards/roles.guard';
+import { UserGuard } from './guards/user.guard';
 
 @Module({
   imports: [KyselyModule],
   controllers: [UserController],
-  providers: [UserService],
+  providers: [UserService, RolesGuard, UserGuard],
 })
 export class UserModule {}
