@@ -26,10 +26,10 @@ import {
   ApiBody,
 } from '@nestjs/swagger';
 import { Role, User } from '@prisma/client';
-import { Roles } from 'src/common/decorators/roles.decorator';
+import { Roles } from '../common/decorators/roles.decorator';
 import { UserGuard } from './guards/user.guard';
-import { RolesGuard } from 'src/common/guards/roles.guard';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../common/guards/roles.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { OrGuard } from '@nest-lab/or-guard';
 
 @ApiTags('Users')

@@ -28,11 +28,11 @@ import {
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Task, User } from '@prisma/client';
-import { GetCurrentUser } from 'src/common/decorators/get-user.decorator';
-import { OwnerGuard } from 'src/common/guards/owner.guard';
-import { OwnerOf } from 'src/common/decorators/owner.decorator';
+import { GetCurrentUser } from '../common/decorators/get-user.decorator';
+import { OwnerGuard } from '../common/guards/owner.guard';
+import { OwnerOf } from '../common/decorators/owner.decorator';
 
 @ApiTags('Tasks')
 @ApiBearerAuth()

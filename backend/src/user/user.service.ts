@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { KyselyService } from 'src/kysely/kysely.service';
+import { KyselyService } from '../kysely/kysely.service';
 import { hash } from 'bcrypt';
 
 @Injectable()

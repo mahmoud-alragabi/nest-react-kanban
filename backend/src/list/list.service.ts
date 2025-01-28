@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { KyselyService } from 'src/kysely/kysely.service';
+import { KyselyService } from '../kysely/kysely.service';
 import { CreateListDto } from './dto/create-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';
 import { List, User } from '@prisma/client';

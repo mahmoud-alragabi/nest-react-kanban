@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
-import { KyselyService } from 'src/kysely/kysely.service';
+import { KyselyService } from '../kysely/kysely.service';
 import { Board, User } from '@prisma/client';
 
 @Injectable()

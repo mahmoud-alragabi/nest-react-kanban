@@ -25,11 +25,11 @@ import {
 import { BoardService } from './board.service';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Board, User } from '@prisma/client';
-import { OwnerGuard } from 'src/common/guards/owner.guard';
-import { GetCurrentUser } from 'src/common/decorators/get-user.decorator';
-import { OwnerOf } from 'src/common/decorators/owner.decorator';
+import { OwnerGuard } from '../common/guards/owner.guard';
+import { GetCurrentUser } from '../common/decorators/get-user.decorator';
+import { OwnerOf } from '../common/decorators/owner.decorator';
 
 @ApiTags('Boards')
 @Controller('boards')

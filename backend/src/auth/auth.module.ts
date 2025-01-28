@@ -1,27 +1,28 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { KyselyService } from 'src/kysely/kysely.service';
-import { JwtModule, JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { KyselyModule } from '../kysely/kysely.module';
 
 @Module({
   imports: [
+    ConfigModule, // Ensure ConfigModule is imported FIRST if you rely on it
+    KyselyModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '1h' },
+    JwtModule.registerAsync({
+      imports: [ConfigModule], // So we can inject ConfigService
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.getOrThrow<string>('JWT_SECRET'),
+        signOptions: { expiresIn: '1h' },
+      }),
+      inject: [ConfigService],
     }),
   ],
   controllers: [AuthController],
-  providers: [
-    AuthService,
-    KyselyService,
-    JwtService,
-    ConfigService,
-    JwtStrategy,
-  ],
+  providers: [AuthService, JwtStrategy],
+  exports: [AuthService], // or export JwtModule if needed
 })
 export class AuthModule {}

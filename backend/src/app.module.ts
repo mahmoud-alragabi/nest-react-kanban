@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { BoardModule } from './board/board.module';
 import { ListModule } from './list/list.module';
 import { TaskModule } from './task/task.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -16,6 +17,10 @@ import { TaskModule } from './task/task.module';
     BoardModule,
     ListModule,
     TaskModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

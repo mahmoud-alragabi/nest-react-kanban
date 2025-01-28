@@ -1,14 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BoardController } from './board.controller';
-import { BoardService } from './board.service';
+import { BoardController } from '../board.controller';
+import { BoardModule } from '../board.module';
 
 describe('BoardController', () => {
   let controller: BoardController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [BoardController],
-      providers: [BoardService],
+      imports: [BoardModule],
     }).compile();
 
     controller = module.get<BoardController>(BoardController);

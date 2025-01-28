@@ -28,11 +28,11 @@ import {
 import { ListService } from './list.service';
 import { CreateListDto } from './dto/create-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { List, User } from '@prisma/client';
-import { OwnerGuard } from 'src/common/guards/owner.guard';
-import { OwnerOf } from 'src/common/decorators/owner.decorator';
-import { GetCurrentUser } from 'src/common/decorators/get-user.decorator';
+import { OwnerGuard } from '../common/guards/owner.guard';
+import { OwnerOf } from '../common/decorators/owner.decorator';
+import { GetCurrentUser } from '../common/decorators/get-user.decorator';
 
 @ApiTags('Lists')
 @Controller('lists')
