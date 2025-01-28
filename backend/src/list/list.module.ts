@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ListService } from './list.service';
 import { ListController } from './list.controller';
+import { KyselyService } from 'src/kysely/kysely.service';
 
 @Module({
   controllers: [ListController],
-  providers: [ListService],
+  providers: [ListService, KyselyService],
 })
 export class ListModule {}
