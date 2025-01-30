@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import TextField from "../../components/TextField/TextField";
 import LoadingButton from "../../components/LoadingButton/LoadingButton";
-import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
+import CustomMessage from "../../components/CustomMessage/CustomMessage";
 
 interface LoginResponse {
   access_token?: string;
@@ -11,12 +11,12 @@ interface LoginResponse {
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setCustomMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setErrorMessage("");
+    setCustomMessage("");
     setLoading(true);
 
     try {
@@ -28,7 +28,7 @@ const Login: React.FC = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        setErrorMessage(errorData.message || "Invalid credentials");
+        setCustomMessage(errorData.message || "Invalid credentials");
         return;
       }
 
@@ -41,7 +41,7 @@ const Login: React.FC = () => {
         // navigate("/boards");
       }
     } catch (error) {
-      setErrorMessage("Server error occurred");
+      setCustomMessage("Server error occurred");
     } finally {
       setLoading(false);
     }
@@ -52,7 +52,7 @@ const Login: React.FC = () => {
       <div className="w-full max-w-md p-6 bg-white shadow-md rounded">
         <h2 className="text-2xl font-semibold mb-4 text-center">Login</h2>
 
-        <ErrorMessage>{errorMessage}</ErrorMessage>
+        <CustomMessage status="error">{errorMessage}</CustomMessage>
 
         <form onSubmit={handleSubmit}>
           <TextField
