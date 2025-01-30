@@ -1,7 +1,8 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import {library} from "@fortawesome/fontawesome-svg-core"
+import {fas} from "@fortawesome/free-solid-svg-icons"
 import './App.css'
+
+library.add(fas)
 
 function App() {
   const [count, setCount] = useState(0)
