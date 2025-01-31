@@ -10,6 +10,7 @@ interface TextFieldProps {
   autoComplete?: string;
   wrapperClassName?: string;
   inputClassName?: string;
+  name?: string;
 }
 
 const TextField: React.FC<TextFieldProps> = ({
@@ -22,6 +23,8 @@ const TextField: React.FC<TextFieldProps> = ({
   autoComplete,
   wrapperClassName = "mb-4",
   inputClassName = "",
+  name = "",
+  ...props
 }) => {
   return (
     <div className={wrapperClassName}>
@@ -32,7 +35,16 @@ const TextField: React.FC<TextFieldProps> = ({
         {label}
       </label>
       <input
-        {...{ type, id, value, onChange, required, autoComplete }}
+        {...{
+          ...props,
+          name,
+          type,
+          id,
+          value,
+          onChange,
+          required,
+          autoComplete,
+        }}
         className={`w-full px-3 py-2 border rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 ${inputClassName}`}
       />
     </div>
