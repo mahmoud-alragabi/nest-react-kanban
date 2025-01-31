@@ -8,16 +8,13 @@ interface CustomMessageProps {
 const ErrorMessage: React.FC<CustomMessageProps> = ({ status, children }) => {
   if (!children) return null;
 
-  const statusColorMap: Record<string, string> = {
-    success: "green",
-    error: "red",
-  };
+  let textColor = "";
 
-  return (
-    <div className={`mb-4 text-${statusColorMap[status]}-500 text-sm`}>
-      {children}
-    </div>
-  );
+  if (status === "error") textColor = "text-red-500";
+
+  if (status === "success") textColor = "text-green-500";
+
+  return <div className={`mb-4 ${textColor} text-sm`}>{children}</div>;
 };
 
 export default ErrorMessage;
