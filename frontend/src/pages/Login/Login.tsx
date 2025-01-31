@@ -1,18 +1,17 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import TextField from "../../components/TextField/TextField";
 import LoadingButton from "../../components/LoadingButton/LoadingButton";
 import CustomMessage from "../../components/CustomMessage/CustomMessage";
-
-interface LoginResponse {
-  access_token?: string;
-}
+import { axiosInstance } from "../../api/axiosInstance";
+import axios, { HttpStatusCode } from "axios";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setCustomMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigateTo = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -20,28 +19,20 @@ const Login: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const endpoint = "/auth/login";
+      const data = { email, password };
+      const options = { withCredentials: true };
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        setCustomMessage(errorData.message || "Invalid credentials");
-        return;
-      }
+      const response = await axiosInstance.post(endpoint, data, options);
 
-      const data: LoginResponse = await response.json();
-      if (data.access_token) {
-        console.log(data.access_token);
-        // Save token to localStorage or a global auth store
-        // localStorage.setItem("token", data.access_token);
-        // Optionally navigate to another route, e.g.:
-        // navigate("/boards");
-      }
+      if (response.status === HttpStatusCode.Ok) navigateTo("/kanban");
     } catch (error) {
-      setCustomMessage("Server error occurred");
+      let errorMessage = "An unexpected error occurred";
+
+      if (axios.isAxiosError(error) && error.response)
+        errorMessage = error?.response?.data?.message || "Invalid Credentials";
+
+      setCustomMessage(errorMessage);
     } finally {
       setLoading(false);
     }
