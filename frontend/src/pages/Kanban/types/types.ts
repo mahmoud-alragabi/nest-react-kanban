@@ -25,3 +25,10 @@ export type User = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type Board = {
+  id: number;
+  title: string;
+  createdAt: string;
+  ownerId: number;
+};
