@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CustomMessage from "../../components/CustomMessage/CustomMessage";
 import TextField from "../../components/TextField/TextField";
 import LoadingButton from "../../components/LoadingButton/LoadingButton";
+import { axiosInstance } from "../../api/axiosInstance";
+import { HttpStatusCode } from "axios";
 
 interface RegistrationForm {
   name: string;
@@ -17,37 +19,38 @@ const Register: React.FC = () => {
     password: "",
   });
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [messageData, setMessageData] = useState({ status: "", message: "" });
+  const navigateTo = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    setErrorMessage("");
-    setSuccessMessage("");
+    setMessageData({ status: "", message: "" });
 
     try {
-      //   const response = await axiosInstance.post('/users', {
-      //     name: formData.name,
-      //     email: formData.email,
-      //     password: formData.password,
-      //   });
-      //   if (response.status === 201) {
-      //     setSuccessMessage('Registration successful. You can now log in.');
-      //     // Optionally redirect after a delay
-      //     // navigate('/login');
-      //   }
-    } catch (error: any) {
-      if (error.response?.status === 409) {
-        setErrorMessage("Email already in use");
-      } else {
-        setErrorMessage("Registration failed");
+      const response = await axiosInstance.post("/users", formData);
+
+      if (response.status === HttpStatusCode.Created) {
+        setMessageData({
+          status: "success",
+          message: "Registration successful.",
+        });
+
+        navigateTo("/kanban");
       }
+    } catch (error: any) {
+      const messageData = { status: "error", message: "Registration failed" };
+
+      if (error.response?.status === HttpStatusCode.Conflict)
+        messageData.message = "Email already in use";
+
+      setMessageData(messageData);
     } finally {
       setLoading(false);
     }
@@ -58,14 +61,15 @@ const Register: React.FC = () => {
       <div className="w-full max-w-md p-6 bg-white shadow-md rounded">
         <h2 className="text-2xl font-semibold mb-4 text-center">Register</h2>
 
-        <CustomMessage status="error">{errorMessage}</CustomMessage>
-
-        <CustomMessage status="success">{successMessage}</CustomMessage>
+        <CustomMessage status={messageData.status}>
+          {messageData.message}
+        </CustomMessage>
 
         <form onSubmit={handleSubmit}>
           <TextField
             label="Name"
             id="name"
+            name="name"
             value={formData.name}
             onChange={handleChange}
             required
@@ -75,6 +79,8 @@ const Register: React.FC = () => {
           <TextField
             label="Email"
             id="email"
+            name="email"
+            type="email"
             value={formData.email}
             onChange={handleChange}
             required
@@ -84,6 +90,8 @@ const Register: React.FC = () => {
           <TextField
             label="Password"
             id="password"
+            name="password"
+            type="password"
             value={formData.password}
             onChange={handleChange}
             required
