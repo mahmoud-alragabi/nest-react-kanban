@@ -26,3 +26,9 @@ export const updateById = <T extends WithId>(
 export const sortByPosition = <T extends WithPosition>(array: T[]): T[] => {
   return array.sort((a, b) => a.position - b.position);
 };
+
+export const last = <T>(array: T[]): T | undefined => {
+  if (!array?.length) return;
+
+  return array[array.length - 1];
+};
