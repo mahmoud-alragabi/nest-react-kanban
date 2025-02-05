@@ -21,7 +21,6 @@ const List: React.FC<ListProps> = ({
     <ListContainer>
       <TitleWithActions
         title={title}
-        titleSize="text-xl"
         onClick={() => {}}
         onEdit={onEdit || (() => {})}
         onRemove={onRemove || (() => {})}
