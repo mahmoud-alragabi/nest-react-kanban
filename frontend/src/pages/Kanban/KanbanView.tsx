@@ -63,7 +63,7 @@ const KanbanView: React.FC = () => {
 
       await Promise.all(tasksPromises);
 
-      const sortedList = sortByPosition(fetchedLists);
+      const sortedList: ListType[] = sortByPosition(fetchedLists);
 
       setLists(sortedList);
     })();
