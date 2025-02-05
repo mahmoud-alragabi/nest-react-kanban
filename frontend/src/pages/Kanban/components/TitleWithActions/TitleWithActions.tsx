@@ -4,7 +4,7 @@ import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 interface TitleWithActionsProps {
   title: string;
-  titleSize?: string;
+  titleClassName?: string;
   onClick: () => void;
   onEdit: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   onRemove: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
@@ -12,7 +12,7 @@ interface TitleWithActionsProps {
 
 const TitleWithActions: React.FC<TitleWithActionsProps> = ({
   title,
-  titleSize = "text-xl",
+  titleClassName = "text-xl",
   onClick,
   onEdit,
   onRemove,
@@ -29,7 +29,7 @@ const TitleWithActions: React.FC<TitleWithActionsProps> = ({
           WebkitBoxOrient: "vertical",
           WebkitLineClamp: 2,
         }}
-        className={`${titleSize} font-bold flex-1 pr-2 min-w-0 break-words`}
+        className={`${titleClassName} font-bold flex-1 pr-2 min-w-0 break-words`}
       >
         {title}
       </span>
