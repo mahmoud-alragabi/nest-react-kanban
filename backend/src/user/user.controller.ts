@@ -13,6 +13,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
   HttpCode,
+  Res,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -31,11 +32,17 @@ import { UserGuard } from './guards/user.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { OrGuard } from '@nest-lab/or-guard';
+import { GetCurrentUser } from 'src/common/decorators/get-user.decorator';
+import { Response } from 'express';
+import { AuthService } from 'src/auth/auth.service';
 
 @ApiTags('Users')
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly authService: AuthService,
+  ) {}
 
   private sanitizeUser(user: User) {
     const { password, ...rest } = user;
@@ -81,11 +88,24 @@ export class UserController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Registration failed due to server error.',
   })
-  async register(@Body() dto: CreateUserDto) {
+  async register(@Body() dto: CreateUserDto, @Res() res: Response) {
     try {
       const result = await this.userService.create(dto);
 
-      return this.sanitizeUser(result);
+      const { accessToken } = await this.authService.login(dto);
+
+      res.cookie('token', accessToken, {
+        httpOnly: true,
+        secure: false,
+        maxAge: 3600000 * 24,
+        sameSite: 'lax',
+      });
+
+      res.send({ message: 'Registered successfully' });
+
+      const sanitizedUser = this.sanitizeUser(result);
+
+      return sanitizedUser;
     } catch (error) {
       if (error.message === 'EMAIL_EXISTS') {
         throw new ConflictException('Email already registered');
