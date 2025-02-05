@@ -6,10 +6,12 @@ import {
   InternalServerErrorException,
   HttpStatus,
   HttpCode,
+  Res,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
+import { Response } from 'express';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -44,9 +46,18 @@ export class AuthController {
     },
   })
   @HttpCode(HttpStatus.OK)
-  async login(@Body() dto: LoginDto) {
+  async login(@Body() dto: LoginDto, @Res() res: Response) {
     try {
-      return await this.authService.login(dto);
+      const { accessToken } = await this.authService.login(dto);
+
+      res.cookie('token', accessToken, {
+        httpOnly: true,
+        secure: false,
+        maxAge: 3600000 * 24,
+        sameSite: 'lax',
+      });
+
+      res.send({ message: 'Logged in successfully' });
     } catch (error) {
       if (error.message === 'INVALID_CREDENTIALS') {
         throw new UnauthorizedException('Invalid credentials');
