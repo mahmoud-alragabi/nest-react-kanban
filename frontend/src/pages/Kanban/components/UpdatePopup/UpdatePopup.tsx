@@ -2,23 +2,27 @@ import React, { useState } from "react";
 
 interface UpdatePopupProps {
   popupTitle: string;
-  onSave: (title: string) => void;
+  onSave: (title: string) => Promise<void>;
   onCancel: () => void;
   initialValue?: string;
 }
 
 const UpdatePopup: React.FC<UpdatePopupProps> = ({
   popupTitle,
-  onSave,
+  onSave = async () => {},
   onCancel,
   initialValue = "",
 }) => {
   const [inputTitle, setInputTitle] = useState(initialValue);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    setLoading(true);
     e.preventDefault();
 
-    onSave(inputTitle);
+    await onSave(inputTitle);
+
+    setLoading(false);
   };
 
   return (
@@ -48,10 +52,11 @@ const UpdatePopup: React.FC<UpdatePopupProps> = ({
               Cancel
             </button>
             <button
+              disabled={loading}
               type="submit"
-              className="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded"
+              className={`py-2 px-4 ${loading ? "bg-gray-500" : "bg-blue-500 hover:bg-blue-600"} text-white rounded`}
             >
-              Save
+              {loading ? "Saving..." : "Save"}
             </button>
           </div>
         </form>
