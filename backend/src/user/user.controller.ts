@@ -166,6 +166,45 @@ export class UserController {
   }
 
   /**
+   * Retrieves the currently authenticated user.
+   * Accessible by the authenticated user.
+   */
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get the current authenticated user' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Current user retrieved successfully.',
+    schema: {
+      example: {
+        id: 1,
+        email: 'user@example.com',
+        role: Role.USER,
+        createdAt: '2023-10-01T12:00:00.000Z',
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'User not found.',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Failed to fetch user due to server error.',
+  })
+  getCurrentUser(@GetCurrentUser() user: User) {
+    try {
+      return this.sanitizeUser(user);
+    } catch (error) {
+      if (error.message === 'USER_NOT_FOUND') {
+        throw new NotFoundException('User not found');
+      }
+      throw new InternalServerErrorException('Failed to fetch user');
+    }
+  }
+
+  /**
    * Retrieves a single user by ID.
    * Accessible only by the user or any ADMIN.
    */
