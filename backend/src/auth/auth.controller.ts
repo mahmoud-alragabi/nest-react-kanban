@@ -54,7 +54,7 @@ export class AuthController {
         httpOnly: true,
         secure: true,
         maxAge: 3600000 * 24,
-        sameSite: 'lax',
+        sameSite: 'none',
       });
 
       res.send({ message: 'Logged in successfully' });
